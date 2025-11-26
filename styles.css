@@ -1,39 +1,79 @@
-.changelog {
-  max-width: 600px; 
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  font-family: Arial, sans-serif;
-}
-.version {
-  border-left: 3px solid #4CAF50; 
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  background-color: #fff;
-  border-radius: 5px;
-}
-.version-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-.version-number {
-  font-weight: bold;
-  color: #4CAF50;
-}
-.version-date {
-  font-size: 0.9em;
-  color: #888;
-}
-.version-description {
-  margin: 0;
-  line-height: 1.4;
-}
-@media (max-width: 400px) {
-  .version-header {
-    flex-direction: column;
-    gap: 3px;
-  }
-}
+    body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+    }
 
+    .card {
+        background: white;
+        padding: 40px;
+        width: 650px;
+        border-radius: 25px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        border: 2px solid #000;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 32px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 30px;
+    }
+
+    .timeline {
+        position: relative;
+        margin-left: 40px;
+        border-left: 2px solid black;
+        padding-left: 30px;
+    }
+
+    .item {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .item::before {
+        content: "";
+        position: absolute;
+        left: -41px;
+        top: 4px;
+        width: 12px;
+        height: 12px;
+        background: black;
+        border-radius: 50%;
+    }
+
+    .date {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .title {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .button {
+        display: block;
+        width: fit-content;
+        margin: 40px auto 0;
+        padding: 14px 26px;
+        font-size: 15px;
+        border-radius: 10px;
+        background: black;
+        color: white;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .button:hover {
+        opacity: 0.8;
+    }
