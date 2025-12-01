@@ -4,20 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Portfolio — [Ton Nom]</title>
-
-  <!-- Swiper CSS (coverflow carousel) -->
+  <meta name="description" content="Portfolio — Développeur web front-end : sites rapides, responsives et orientés conversion." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-
-  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
+  <!-- Favicons (optional) -->
 </head>
 <body>
-
-  <!-- Header / Nav -->
-  <header class="site-header">
+  <header class="site-header" role="banner">
     <nav class="nav container" aria-label="Navigation principale">
       <a class="logo" href="#hero" data-goto>MonLogo</a>
-      <div class="nav-links">
+      <div class="nav-actions">
+        <button id="themeToggle" aria-label="Basculer thème">🌓</button>
+      </div>
+      <div class="nav-links" role="navigation" aria-label="Liens du site">
         <a href="#hero" data-goto>Accueil</a>
         <a href="#projets" data-goto>Projets</a>
         <a href="#competences" data-goto>Compétences</a>
@@ -25,19 +27,27 @@
         <a href="#services" data-goto>Services</a>
         <a href="#contact" data-goto>Contact</a>
       </div>
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-expanded="false" aria-controls="mobileMenu">☰</button>
     </nav>
+    <div id="mobileMenu" class="mobile-menu" hidden>
+      <a href="#hero" data-goto>Accueil</a>
+      <a href="#projets" data-goto>Projets</a>
+      <a href="#competences" data-goto>Compétences</a>
+      <a href="#methodo" data-goto>Méthodo</a>
+      <a href="#services" data-goto>Services</a>
+      <a href="#contact" data-goto>Contact</a>
+    </div>
   </header>
 
-  <!-- Fullpage sections (jump per section) -->
-  <main id="fullpage">
-    <!-- HERO : proposition de valeur -->
-    <section id="hero" class="section">
+  <main id="fullpage" aria-live="polite">
+    <!-- HERO -->
+    <section id="hero" class="section" aria-label="Accueil">
       <div class="section-inner container">
         <div class="left">
           <h1>Développeur web — je crée des solutions efficaces pour votre entreprise</h1>
-          <p class="lead">Développeur web prêt à créer des solutions efficaces pour votre entreprise — sites rapides, responsives et orientés conversion.</p>
+          <p class="lead">Sites rapides, responsives et orientés conversion — React / Vue / Static performant.</p>
 
-          <ul class="hero-bullets">
+          <ul class="hero-bullets" aria-hidden="false">
             <li><strong>Spécialité :</strong> Front-end moderne (React / Vue) & performance</li>
             <li><strong>Résultats :</strong> Optimisation des temps de chargement, UX claire</li>
           </ul>
@@ -48,18 +58,21 @@
           </div>
 
           <div class="hero-socials">
-            <!-- remplace par tes profils -->
             <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener">GitHub</a>
             <a href="https://linkedin.com/in/TON_PSEUDO" target="_blank" rel="noopener">LinkedIn</a>
             <a href="mailto:toi@exemple.com">Email</a>
           </div>
         </div>
 
-        <div class="right">
-          <!-- mini projets teaser (grid ou carousel preview) -->
+        <div class="right" aria-hidden="false">
+          <!-- teaser grid with responsive images + srcset -->
           <div class="teaser-grid">
             <article class="teaser">
-              <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=800&auto=format&fit=crop" alt="Site e-commerce">
+              <img loading="lazy" width="120" height="80"
+                srcset="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=400 400w, https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=800 800w"
+                sizes="(max-width:600px) 120px, 160px"
+                src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=800&auto=format&fit=crop"
+                alt="Site e-commerce">
               <div class="teaser-meta">
                 <h4>Site e-commerce responsive</h4>
                 <p>Optimisé pour mobile — +30% vitesse.</p>
@@ -67,7 +80,9 @@
             </article>
 
             <article class="teaser">
-              <img src="https://images.unsplash.com/photo-1505691723518-36a6f8f5d3df?q=80&w=800&auto=format&fit=crop" alt="App réservation">
+              <img loading="lazy" width="120" height="80"
+                src="https://images.unsplash.com/photo-1505691723518-36a6f8f5d3df?q=80&w=800&auto=format&fit=crop"
+                alt="App réservation">
               <div class="teaser-meta">
                 <h4>Application de réservation</h4>
                 <p>Flux UI simplifié — meilleure conversion.</p>
@@ -75,7 +90,9 @@
             </article>
 
             <article class="teaser">
-              <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop" alt="Refonte e-commerce">
+              <img loading="lazy" width="120" height="80"
+                src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop"
+                alt="Refonte e-commerce">
               <div class="teaser-meta">
                 <h4>Refonte e-commerce</h4>
                 <p>Refonte UI/UX et optimisation SEO technique.</p>
@@ -89,31 +106,29 @@
       <button id="toNext" class="scroll-btn" aria-label="Aller à la section suivante">↓</button>
     </section>
 
-    <!-- PROJETS : carousel coverflow sur X (avec slide de teasing d'étude de cas) -->
-    <section id="projets" class="section">
+    <!-- PROJETS -->
+    <section id="projets" class="section" aria-label="Projets">
       <div class="section-inner container">
         <h2 class="section-title">Projets & études de cas</h2>
         <p class="section-sub">Carrousel de projets — clique pour en savoir plus.</p>
-
         <div class="carousel-wrap">
-          <div class="swiper projects-swiper">
+          <div class="swiper projects-swiper" aria-roledescription="carousel">
             <div class="swiper-wrapper">
-              <!-- Slide : mini étude de cas (teaser) -->
               <div class="swiper-slide">
-                <article class="project-card cover case-teaser">
-                  <div class="project-media" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1400&auto=format&fit=crop')"></div>
+                <article class="project-card cover case-teaser" tabindex="0">
+                  <div class="project-media" role="img" aria-label="Étude de cas site e-commerce" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop')"></div>
                   <div class="project-meta">
                     <h3>Étude de cas — Site e-commerce</h3>
-                    <p><strong>Contexte :</strong> Site lent, faible conversion. <br><strong>Solution :</strong> Refonte SPA, lazy loading, optimisation images. <br><strong>Résultat :</strong> Temps de chargement -40%, +22% conversion.</p>
+                    <p><strong>Contexte :</strong> Site lent, faible conversion.<br><strong>Solution :</strong> Refonte SPA, lazy loading, optimisation images.<br><strong>Résultat :</strong> Temps de chargement -40%, +22% conversion.</p>
                     <a class="project-cta" href="#" aria-label="Voir l'étude de cas">Voir l'étude de cas</a>
                   </div>
                 </article>
               </div>
 
-              <!-- Slide 2 -->
+              <!-- more slides -->
               <div class="swiper-slide">
-                <article class="project-card cover">
-                  <div class="project-media" style="background-image:url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1400&auto=format&fit=crop')"></div>
+                <article class="project-card cover" tabindex="0">
+                  <div class="project-media" role="img" aria-label="Site e-commerce responsive" style="background-image:url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1400&auto=format&fit=crop')"></div>
                   <div class="project-meta">
                     <h3>Site e-commerce responsive</h3>
                     <p>Landing immersive, UI moderne, checkout optimisé.</p>
@@ -121,10 +136,9 @@
                 </article>
               </div>
 
-              <!-- Slide 3 -->
               <div class="swiper-slide">
-                <article class="project-card cover">
-                  <div class="project-media" style="background-image:url('https://images.unsplash.com/photo-1505691723518-36a6f8f5d3df?q=80&w=1400&auto=format&fit=crop')"></div>
+                <article class="project-card cover" tabindex="0">
+                  <div class="project-media" role="img" aria-label="Application de réservation" style="background-image:url('https://images.unsplash.com/photo-1505691723518-36a6f8f5d3df?q=80&w=1400&auto=format&fit=crop')"></div>
                   <div class="project-meta">
                     <h3>Application de réservation</h3>
                     <p>Expérience optimisée pour mobiles & tablettes.</p>
@@ -132,10 +146,9 @@
                 </article>
               </div>
 
-              <!-- Slide 4 -->
               <div class="swiper-slide">
-                <article class="project-card cover">
-                  <div class="project-media" style="background-image:url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1400&auto=format&fit=crop')"></div>
+                <article class="project-card cover" tabindex="0">
+                  <div class="project-media" role="img" aria-label="Refonte UI/UX" style="background-image:url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1400&auto=format&fit=crop')"></div>
                   <div class="project-meta">
                     <h3>Refonte UI/UX</h3>
                     <p>Système de design, composants réutilisables et docs.</p>
@@ -144,57 +157,56 @@
               </div>
             </div>
 
-            <!-- pagination -->
-            <div class="swiper-pagination"></div>
+            <div class="swiper-pagination" role="navigation" aria-label="Pagination"></div>
+            <button class="swiper-button-prev" aria-label="Slide précédente"></button>
+            <button class="swiper-button-next" aria-label="Slide suivante"></button>
           </div>
         </div>
-
       </div>
     </section>
 
     <!-- COMPETENCES -->
-    <section id="competences" class="section">
+    <section id="competences" class="section" aria-label="Compétences">
       <div class="section-inner container">
         <div>
           <h2 class="section-title">Compétences</h2>
           <p class="section-sub">Stack technique & niveaux</p>
 
-          <div class="skills-grid">
-            <div class="skill">
+          <div class="skills-grid" role="list">
+            <div class="skill" role="listitem">
               <div class="skill-name">HTML5 / CSS3</div>
               <div class="skill-level">Expert</div>
             </div>
-            <div class="skill">
+            <div class="skill" role="listitem">
               <div class="skill-name">JavaScript (ES6+)</div>
               <div class="skill-level">Avancé</div>
             </div>
-            <div class="skill">
+            <div class="skill" role="listitem">
               <div class="skill-name">React / Vue</div>
               <div class="skill-level">Avancé</div>
             </div>
-            <div class="skill">
+            <div class="skill" role="listitem">
               <div class="skill-name">Responsive Design</div>
               <div class="skill-level">Expert</div>
             </div>
-            <div class="skill">
+            <div class="skill" role="listitem">
               <div class="skill-name">Performance web</div>
               <div class="skill-level">Avancé</div>
             </div>
-            <div class="skill">
+            <div class="skill" role="listitem">
               <div class="skill-name">SEO technique</div>
               <div class="skill-level">Intermédiaire</div>
             </div>
           </div>
         </div>
 
-        <!-- interactive tags / mini demo slider -->
         <div>
           <h3>Exemples interactifs</h3>
           <p>Cliquez une compétence pour voir un mini-exemple.</p>
-          <div class="skill-tags">
-            <button class="tag" data-demo="demo-html">HTML & CSS</button>
-            <button class="tag" data-demo="demo-js">Animation JS</button>
-            <button class="tag" data-demo="demo-react">React</button>
+          <div class="skill-tags" role="tablist">
+            <button class="tag" data-demo="demo-html" role="tab">HTML & CSS</button>
+            <button class="tag" data-demo="demo-js" role="tab">Animation JS</button>
+            <button class="tag" data-demo="demo-react" role="tab">React</button>
           </div>
 
           <div class="demo-area" id="demo-area">
@@ -206,8 +218,8 @@
       </div>
     </section>
 
-    <!-- METHODOLOGIE -->
-    <section id="methodo" class="section">
+    <!-- METHODO -->
+    <section id="methodo" class="section" aria-label="Méthodologie">
       <div class="section-inner container two-col">
         <div>
           <h2 class="section-title">Méthodologie — Agile & collaborative</h2>
@@ -224,7 +236,6 @@
         </div>
 
         <div class="method-graphic" aria-hidden="true">
-          <!-- simple CSS infographic -->
           <div class="step">Plan →</div>
           <div class="step">Sprint →</div>
           <div class="step">Review →</div>
@@ -234,14 +245,14 @@
     </section>
 
     <!-- SERVICES -->
-    <section id="services" class="section">
+    <section id="services" class="section" aria-label="Services">
       <div class="section-inner container">
         <div>
           <h2 class="section-title">Services</h2>
           <p class="section-sub">Offre complète pour lancer ou améliorer votre présence en ligne.</p>
 
           <ul class="services-list">
-            <li><strong>Sites web responsive</strong> — conception & développement (HTML/CSS/JS, frameworks)</li>
+            <li><strong>Sites web responsive</strong> — conception & développement</li>
             <li><strong>Interfaces UI</strong> — prototypes & design systems</li>
             <li><strong>Intégration front-end</strong> — React / Vue / intégration API</li>
             <li><strong>Optimisation performance</strong> — audits & correctifs</li>
@@ -253,17 +264,19 @@
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="section">
+    <section id="contact" class="section" aria-label="Contact">
       <div class="section-inner container">
         <div>
           <h2 class="section-title">Contact & appel à l'action</h2>
           <p class="section-sub">Discutons de votre projet — devis rapide et sans engagement.</p>
 
-          <!-- Replace {YOUR_FORM_ID} with your Formspree ID -->
-          <form id="contactForm" class="contact-form" action="https://formspree.io/f/{YOUR_FORM_ID}" method="POST">
-            <input type="text" name="name" placeholder="Ton nom" required>
-            <input type="email" name="email" placeholder="Ton email" required>
-            <textarea name="message" placeholder="Ton message / brief" required></textarea>
+          <form id="contactForm" class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+            <label class="sr-only" for="name">Nom</label>
+            <input id="name" type="text" name="name" placeholder="Ton nom" required>
+            <label class="sr-only" for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="Ton email" required>
+            <label class="sr-only" for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Ton message / brief" required></textarea>
 
             <div class="form-row">
               <button class="btn" type="submit">Envoyer</button>
@@ -271,7 +284,7 @@
             </div>
           </form>
 
-          <div class="contact-socials">
+          <div class="contact-socials" aria-hidden="false">
             <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener">GitHub</a> ·
             <a href="https://linkedin.com/in/TON_PSEUDO" target="_blank" rel="noopener">LinkedIn</a> ·
             <a href="mailto:toi@exemple.com">Email</a>
@@ -281,14 +294,13 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <div class="container">© <span id="year"></span> — [Ton Nom]</div>
   </footer>
 
   <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js" defer></script>
   <!-- App script -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
