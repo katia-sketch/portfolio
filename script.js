@@ -1,102 +1,114 @@
-/* fullpage snap helper: scroll to next section button */
+// Init: Locomotive Scroll + GSAP + Swiper + form handling
 document.addEventListener('DOMContentLoaded', function () {
-  // UPDATE FOOTER YEAR
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  // year
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
 
-  // Scroll indicator -> go to next snap section
-  const scrollNext = document.getElementById('scrollNext');
-  if (scrollNext) {
-    scrollNext.addEventListener('click', () => {
-      const main = document.getElementById('main-snap');
-      if (!main) return;
-      // find currently visible section
-      const sections = Array.from(document.querySelectorAll('.snap-section'));
-      const middle = main.scrollTop + (window.innerHeight / 2);
-      let currentIndex = sections.findIndex(sec => {
-        const rect = sec.getBoundingClientRect();
-        const top = sec.offsetTop;
-        const bottom = top + sec.offsetHeight;
-        return middle >= top && middle <= bottom;
-      });
-      if (currentIndex === -1) currentIndex = 0;
-      const next = sections[currentIndex + 1] || sections[sections.length - 1];
-      next.scrollIntoView({ behavior: 'smooth' });
+  // LOCOMOTIVE SCROLL
+  const loco = new LocomotiveScroll({
+    el: document.querySelector('[data-scroll-container]'),
+    smooth: true,
+    multiplier: 1,
+    class: 'is-reveal'
+  });
+
+  // connect GSAP ScrollTrigger with Locomotive
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.scrollerProxy('[data-scroll-container]', {
+    scrollTop(value) {
+      return arguments.length ? loco.scrollTo(value, 0, 0) : loco.scroll.instance.scroll.y;
+    },
+    getBoundingClientRect() {
+      return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+    },
+    // pinType: document.querySelector('[data-scroll-container]').style.transform ? "transform" : "fixed"
+  });
+
+  loco.on('scroll', ScrollTrigger.update);
+
+  // basic GSAP entrance animations for each section
+  document.querySelectorAll('[data-scroll-section]').forEach((section) => {
+    gsap.from(section.querySelectorAll('h2, h1, p, .project-card, img, .project-card h4'), {
+      scrollTrigger: {
+        trigger: section,
+        scroller: '[data-scroll-container]',
+        start: 'top 75%',
+      },
+      opacity: 0,
+      y: 20,
+      stagger: 0.08,
+      duration: 0.6,
+      ease: 'power2.out'
+    });
+  });
+
+  // "scroll to next" button logic using locomotive
+  const nextBtn = document.getElementById('scrollNext');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const sections = [...document.querySelectorAll('[data-scroll-section]')];
+      const currentY = loco.scroll.instance.scroll.y;
+      const next = sections.find(s => s.offsetTop > currentY + 20) || sections[sections.length - 1];
+      loco.scrollTo(next);
     });
   }
 
-  // Projects horizontal scrolling controls
-  const scrollContainer = document.getElementById('projectsScroll');
-  const prevBtn = document.getElementById('projPrev');
-  const nextBtn = document.getElementById('projNext');
+  // SWIPER (horizontal projects)
+  const swiper = new Swiper('.mySwiper', {
+    slidesPerView: 1.2,
+    spaceBetween: 20,
+    centeredSlides: false,
+    breakpoints: {
+      768: { slidesPerView: 2.2 },
+      1024: { slidesPerView: 3 },
+    }
+  });
 
-  function scrollByCard(dir = 1) {
-    if (!scrollContainer) return;
-    // scroll by container width (approx one "page" of cards)
-    const amount = Math.round(scrollContainer.clientWidth * 0.8) * dir;
-    scrollContainer.scrollBy({ left: amount, behavior: 'smooth' });
-  }
-  if (prevBtn) prevBtn.addEventListener('click', () => scrollByCard(-1));
-  if (nextBtn) nextBtn.addEventListener('click', () => scrollByCard(1));
+  // nav for swiper
+  document.getElementById('projPrev').addEventListener('click', () => swiper.slidePrev());
+  document.getElementById('projNext').addEventListener('click', () => swiper.slideNext());
 
-  // enable mouse-drag to scroll horizontally (nice UX)
-  (function enableDragScroll(el) {
-    if (!el) return;
-    let isDown = false, startX, scrollLeft;
-    el.addEventListener('mousedown', (e) => {
-      isDown = true;
-      el.classList.add('dragging');
-      startX = e.pageX - el.offsetLeft;
-      scrollLeft = el.scrollLeft;
-    });
-    el.addEventListener('mouseleave', () => { isDown = false; el.classList.remove('dragging'); });
-    el.addEventListener('mouseup', () => { isDown = false; el.classList.remove('dragging'); });
-    el.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
+  // Smooth anchor links using locomotive
+  document.querySelectorAll('[data-scroll-to]').forEach((el) => {
+    el.addEventListener('click', (e) => {
       e.preventDefault();
-      const x = e.pageX - el.offsetLeft;
-      const walk = (x - startX) * 1.2; // scroll-fast
-      el.scrollLeft = scrollLeft - walk;
+      const href = el.getAttribute('href');
+      if (!href || !href.startsWith('#')) return;
+      const target = document.querySelector(href);
+      if (target) loco.scrollTo(target);
     });
-    // touch support handled by native overflow scrolling
-  })(scrollContainer);
+  });
 
-  // CONTACT FORM: AJAX submit (enhanced UX) — will still work with Formspree endpoint
+  // FORM: AJAX submit to Formspree (works on GitHub Pages)
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!form.action || form.action.includes('{YOUR_FORM_ID}')) {
-        status.textContent = '⚠️ Remplace {YOUR_FORM_ID} par ton identifiant Formspree (voir instructions).';
+        status.textContent = '⚠️ Remplace {YOUR_FORM_ID} par ton endpoint Formspree.';
         return;
       }
       const data = new FormData(form);
       try {
-        const resp = await fetch(form.action, {
-          method: form.method || 'POST',
+        const res = await fetch(form.action, {
+          method: 'POST',
           headers: { 'Accept': 'application/json' },
           body: data
         });
-        if (resp.ok) {
+        if (res.ok) {
           form.reset();
           status.textContent = '✅ Merci — message envoyé.';
         } else {
-          const json = await resp.json().catch(()=>null);
-          status.textContent = (json && json.error) ? `Erreur: ${json.error}` : 'Erreur envoi du formulaire.';
+          const json = await res.json().catch(() => null);
+          status.textContent = json?.error || 'Erreur lors de l’envoi.';
         }
       } catch (err) {
-        status.textContent = 'Erreur réseau — vérifie ta connexion.';
+        status.textContent = 'Erreur réseau — réessaye.';
       }
     });
   }
 
-  // keyboard accessibility for horizontal projects (left/right)
-  if (scrollContainer) {
-    scrollContainer.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') { scrollByCard(1); e.preventDefault(); }
-      if (e.key === 'ArrowLeft') { scrollByCard(-1); e.preventDefault(); }
-    });
-  }
-
-}); // DOMContentLoaded
+  // refresh Locomotive on images loaded (to get correct offsets)
+  window.addEventListener('load', () => loco.update());
+});
